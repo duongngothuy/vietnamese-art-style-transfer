@@ -1,4 +1,3 @@
-pip install opencv-python #for automatic detection
 fastapi          
 uvicorn          # ASGI server to run FastAPI
 python-multipart # Required for FormData/file uploads
