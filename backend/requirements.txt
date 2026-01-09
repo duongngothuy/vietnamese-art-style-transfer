@@ -3,3 +3,4 @@ uvicorn          # ASGI server to run FastAPI
 python-multipart # Required for FormData/file uploads
 Pillow           # PIL for image processing (filters, overlays)
 numpy            # Array operations for OpenCV
+requests
