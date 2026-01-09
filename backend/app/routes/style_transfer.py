@@ -1,13 +1,12 @@
 # backend/app/routes/style_transfer.py
-
+import replicate
 from fastapi import APIRouter, File, UploadFile, Form, HTTPException
 from fastapi.responses import JSONResponse
 import os
 from PIL import Image, ImageFilter, ImageEnhance, ImageOps
 import io
 import base64
-import cv2
-import numpy as np
+import requests
 
 # Create router for style transfer endpoints
 router = APIRouter()
@@ -36,41 +35,47 @@ style_descriptions = {
 }
 
 def apply_vietnamese_style(image_data: bytes, style: str, crop_analysis: dict = None) -> dict:
-    """Apply Vietnamese art style effects to an image using PIL"""
+    """Apply Vietnamese art style - hybrid approach"""
     
-    # Open the image
-    image = Image.open(io.BytesIO(image_data))
+    image = Image.open(io.BytesIO(image_data)).convert('RGB')
     
-    # Convert to RGB if necessary
-    if image.mode != 'RGB':
-        image = image.convert('RGB')
-    
-    # Apply smart crop if detected
     if crop_analysis and crop_analysis.get("crop_detected"):
         image = apply_smart_crop(image, crop_analysis)
     
-    # Apply style-specific effects
+    # Apply enhanced PIL filters based on style
     if style == "lacquer":
         styled_image = apply_lacquer_style(image)
     elif style == "silk":
         styled_image = apply_silk_style(image)
     elif style == "dongho":
         styled_image = apply_dongho_style(image)
+    
+    # Apply AI enhancement on top
+    img_bytes = io.BytesIO()
+    styled_image.save(img_bytes, format='JPEG')
+    img_bytes.seek(0)
+    
+    # Use DeepAI style transfer (free tier)
+    response = requests.post(
+        "https://api.deepai.org/api/neural-style",
+        files={'image': img_bytes},
+        headers={'api-key': os.environ.get('DEEPAI_API_KEY')}
+    )
+    
+    if response.status_code == 200:
+        result_url = response.json()['output_url']
+        result_img = Image.open(requests.get(result_url, stream=True).raw)
     else:
-        styled_image = image
+        result_img = styled_image  # Fallback to PIL filters
     
-    # Convert back to bytes
-    output_buffer = io.BytesIO()
-    styled_image.save(output_buffer, format='JPEG', quality=90)
-    output_bytes = output_buffer.getvalue()
-    
-    # Convert to base64 for frontend display
-    output_base64 = base64.b64encode(output_bytes).decode('utf-8')
+    buffer = io.BytesIO()
+    result_img.save(buffer, format='JPEG', quality=95)
+    b64 = base64.b64encode(buffer.getvalue()).decode()
     
     return {
-        "styled_image_base64": output_base64,
-        "width": styled_image.width,
-        "height": styled_image.height
+        "styled_image_base64": b64,
+        "width": result_img.width,
+        "height": result_img.height
     }
 
 def smart_crop_image(image_data: bytes) -> dict:
@@ -150,6 +155,8 @@ def apply_smart_crop(image: Image.Image, crop_info: dict) -> Image.Image:
         x1, y1, x2, y2 = crop_info["crop_box"]
         return image.crop((x1, y1, x2, y2))
     return image
+
+def apply_lacquer_style(image: Image.Image) -> Image.Image:
     """Apply lacquer painting effects: glossy, enhanced contrast, golden tint"""
     
     # Enhance contrast for that glossy look
@@ -246,13 +253,7 @@ async def style_transfer(
         
         print(f"Processing {image.filename} with {style} style...")
         
-        # AI Smart Crop Analysis
-        try:
-            crop_analysis = smart_crop_image(image_data)
-            print(f"Smart crop: {crop_analysis['detection_type']} detected with {crop_analysis['confidence']:.2f} confidence")
-        except Exception as crop_error:
-            print(f"Smart crop failed: {crop_error}")
-            crop_analysis = {"crop_detected": False}
+        crop_analysis = {"crop_detected": False}
         
         # Apply actual style transfer
         try:
