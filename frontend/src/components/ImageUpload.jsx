@@ -84,7 +84,7 @@ function ImageUpload() {
       console.log('Sending request to backend...')
 
       const response = await axios.post(
-        'https://your-app-name.onrender.com/api/style-transfer',
+        'https://vietnamese-art-style-transfer.onrender.com',
         formData,
         {
           headers: {
