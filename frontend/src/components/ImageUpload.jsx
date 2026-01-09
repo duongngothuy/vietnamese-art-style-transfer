@@ -84,7 +84,7 @@ function ImageUpload() {
       console.log('Sending request to backend...')
 
       const response = await axios.post(
-        'http://localhost:8000/api/style-transfer',
+        'https://your-app-name.onrender.com/api/style-transfer',
         formData,
         {
           headers: {
