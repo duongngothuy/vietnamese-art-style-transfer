@@ -1,1 +1,6 @@
-pip install opencv-python
+pip install opencv-python #for automatic detection
+fastapi          
+uvicorn          # ASGI server to run FastAPI
+python-multipart # Required for FormData/file uploads
+Pillow           # PIL for image processing (filters, overlays)
+numpy            # Array operations for OpenCV
