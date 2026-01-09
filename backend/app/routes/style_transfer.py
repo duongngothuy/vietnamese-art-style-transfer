@@ -1,5 +1,4 @@
 # backend/app/routes/style_transfer.py
-import replicate
 from fastapi import APIRouter, File, UploadFile, Form, HTTPException
 from fastapi.responses import JSONResponse
 import os
