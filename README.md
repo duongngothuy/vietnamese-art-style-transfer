@@ -4,7 +4,7 @@
 
 A full-stack web application that transforms modern photos into traditional Vietnamese art styles by filtering the pictures, combining computer vision with cultural heritage preservation.
 
-## Demo Links:
+## Demo Links
 - **Frontend:** https://vietnamese-art-style-transfer.vercel.app
 - **Backend API:** https://vietnamese-art-style-transfer.onrender.com
 
