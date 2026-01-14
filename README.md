@@ -56,3 +56,9 @@ Visit `http://localhost:5173`
 3. Click "Apply Art Style"
 4. Download your Vietnamese-style artwork
 
+## Demo Screenshots for three styles on one image:
+
+![Son Mai Style](backend/app/uploads/SonMai.png)
+![Silk Style](backend/app/uploads/Lua.png)
+![Dong Ho Style](backend/app/uploads/DongHo.png)
+
