@@ -1,10 +1,16 @@
+
+
 # Vietnamese Art Style Transfer
 
-An AI-powered full-stack web application that transforms modern photos into traditional Vietnamese art styles, combining computer vision with cultural heritage preservation.
+A full-stack web application that transforms modern photos into traditional Vietnamese art styles by filtering the pictures, combining computer vision with cultural heritage preservation.
+
+## Demo Links
+- **Frontend:** https://vietnamese-art-style-transfer.vercel.app
+- **Backend API:** https://vietnamese-art-style-transfer.onrender.com
 
 ## Features
 
-- **AI-Powered Smart Cropping**: Automatic face detection and composition analysis using OpenCV
+- **AI-Powered Smart Cropping**: Automatic face detection and composition analysis using OpenCV (Smart-Cropping is disabled due to M1 Mac dependencies, but locally worked)
 - **Three Traditional Art Styles**: Lacquer painting, silk painting, and Dong Ho folk prints
 - **Real-time Processing**: Fast image transformation with instant preview
 - **Download & Share**: Save high-quality styled images
@@ -24,8 +30,8 @@ UNESCO-recognized heritage from the 16th century. Bold, colorful woodblock print
 ## Technology Stack
 
 **Frontend:** React 18, Vite, Tailwind CSS, Axios  
-**Backend:** FastAPI, OpenCV, PIL, Uvicorn  
-**AI/ML:** Haar Cascade face detection, edge detection algorithms
+**Backend:** FastAPI, OpenCV, PIL, Uvicorn 
+**AI/CV:** OpenCV Haar Cascades for face detection (local only)
 
 ## Quick Start
 ```bash
@@ -50,9 +56,3 @@ Visit `http://localhost:5173`
 3. Click "Apply Art Style"
 4. Download your Vietnamese-style artwork
 
-## Contact
-
-Duong Ngo - [GitHub](https://github.com/duongngothuy)
-
----
-*Preserving Vietnamese cultural heritage through modern technology* 
